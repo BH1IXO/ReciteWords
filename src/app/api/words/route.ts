@@ -19,8 +19,11 @@ export async function GET(request: NextRequest) {
     todayEnd.setHours(23, 59, 59, 999)
     const words = await prisma.word.findMany({
       where: {
-        reviewAt: { not: null, lte: todayEnd },
-        mastered: true,
+        AND: [
+          { reviewAt: { not: null } },
+          { reviewAt: { lte: todayEnd } },
+          { mastered: true },
+        ],
       },
       orderBy: { reviewAt: 'asc' },
     })
