@@ -120,12 +120,20 @@ export default function Home() {
           <h1 className="text-2xl font-bold text-gray-800">今日单词</h1>
           <p className="text-gray-400 text-sm mt-1">{today}</p>
         </div>
-        <Link
-          href="/manage"
-          className="text-sm text-indigo-500 font-medium px-3 py-1.5 rounded-xl border border-indigo-200 hover:bg-indigo-50 transition-colors mt-1"
-        >
-          管理
-        </Link>
+        <div className="flex gap-2 mt-1">
+          <Link
+            href="/stats"
+            className="text-sm text-indigo-500 font-medium px-3 py-1.5 rounded-xl border border-indigo-200 hover:bg-indigo-50 transition-colors"
+          >
+            统计
+          </Link>
+          <Link
+            href="/manage"
+            className="text-sm text-indigo-500 font-medium px-3 py-1.5 rounded-xl border border-indigo-200 hover:bg-indigo-50 transition-colors"
+          >
+            管理
+          </Link>
+        </div>
       </div>
 
       {/* Tab */}
