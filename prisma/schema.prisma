@@ -11,12 +11,23 @@ datasource db {
 }
 
 model Word {
-  id          Int      @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   english     String
   chinese     String
   phonetic    String?
-  mastered    Boolean  @default(false)
-  studyDate   String   // YYYY-MM-DD format
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  mastered    Boolean    @default(false)
+  studyDate   String     // YYYY-MM-DD format
+  level       Int        @default(0)
+  reviewAt    DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  logs        StudyLog[]
+}
+
+model StudyLog {
+  id        Int      @id @default(autoincrement())
+  wordId    Int
+  action    String   // "flip" | "mastered" | "skip"
+  createdAt DateTime @default(now())
+  word      Word     @relation(fields: [wordId], references: [id], onDelete: Cascade)
 }

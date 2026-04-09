@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { getNextReviewDate } from '@/lib/srs'
 
 export async function PATCH(
   request: NextRequest,
@@ -7,12 +8,25 @@ export async function PATCH(
 ) {
   const id = parseInt(params.id)
   const body = await request.json()
-  const { mastered } = body
+  const { mastered, action } = body
+
+  // Record flip action
+  if (action === 'flip') {
+    await prisma.studyLog.create({ data: { wordId: id, action: 'flip' } })
+    return NextResponse.json({ ok: true })
+  }
+
+  // Mark mastered
+  const current = await prisma.word.findUniqueOrThrow({ where: { id } })
+  const newLevel = Math.min(current.level + 1, 4)
+  const reviewAt = getNextReviewDate(newLevel)
 
   const word = await prisma.word.update({
     where: { id },
-    data: { mastered },
+    data: { mastered, level: newLevel, reviewAt },
   })
+
+  await prisma.studyLog.create({ data: { wordId: id, action: 'mastered' } })
 
   return NextResponse.json(word)
 }

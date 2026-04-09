@@ -5,15 +5,19 @@ interface Word {
   english: string
   chinese: string
   phonetic: string | null
+  level?: number
 }
 
 interface WordCardProps {
   word: Word
   flipped: boolean
   onFlip: () => void
+  showLevel?: boolean
 }
 
-export default function WordCard({ word, flipped, onFlip }: WordCardProps) {
+export default function WordCard({ word, flipped, onFlip, showLevel }: WordCardProps) {
+  const stars = showLevel && word.level ? '★'.repeat(word.level) + '☆'.repeat(4 - word.level) : null
+
   return (
     <div
       className="card-flip w-full cursor-pointer select-none"
@@ -23,6 +27,9 @@ export default function WordCard({ word, flipped, onFlip }: WordCardProps) {
       <div className={`card-inner ${flipped ? 'flipped' : ''}`}>
         {/* Front: English */}
         <div className="card-front bg-white rounded-3xl shadow-md flex flex-col items-center justify-center p-8">
+          {stars && (
+            <div className="text-amber-400 text-sm tracking-widest mb-4">{stars}</div>
+          )}
           <div className="text-xs font-medium text-indigo-400 tracking-widest uppercase mb-6">
             点击查看释义
           </div>
