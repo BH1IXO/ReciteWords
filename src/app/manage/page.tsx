@@ -51,7 +51,7 @@ export default function ManagePage() {
   const today = new Date().toISOString().split('T')[0]
 
   useEffect(() => {
-    fetch('/api/words?mode=new')
+    fetch('/api/words?mode=all')
       .then((r) => r.json())
       .then((data: Word[]) => {
         setWords(data)

@@ -6,6 +6,11 @@ export async function GET(request: NextRequest) {
   const mode = searchParams.get('mode')
   const date = searchParams.get('date') || new Date().toISOString().split('T')[0]
 
+  if (mode === 'all') {
+    const words = await prisma.word.findMany({ orderBy: { id: 'asc' } })
+    return NextResponse.json(words)
+  }
+
   if (mode === 'new') {
     const words = await prisma.word.findMany({
       where: { reviewAt: null },
@@ -30,7 +35,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(words)
   }
 
-  // Default: filter by studyDate (original behavior)
+  // Default: filter by studyDate
   const words = await prisma.word.findMany({
     where: { studyDate: date },
     orderBy: { id: 'asc' },
